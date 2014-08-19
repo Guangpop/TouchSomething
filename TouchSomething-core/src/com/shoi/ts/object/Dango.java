@@ -6,15 +6,18 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 public class Dango extends GameObject {
 	
 	float stateTime;
 	Animation animation;
 	Direct direct;
+	
+	int maxwidth; 
+	int maxheight;
 	
 	public Dango() {
 		
@@ -33,24 +36,40 @@ public class Dango extends GameObject {
 		
 		direct = Direct.STOP;
 		
-		int maxwidth = Gdx.graphics.getWidth() - front1.getWidth(); 
-		int maxheight = Gdx.graphics.getHeight() - front1.getHeight();
+		maxwidth = Gdx.graphics.getWidth() - front1.getWidth(); 
+		maxheight = Gdx.graphics.getHeight() - front1.getHeight();
 		
-		this.addAction(Actions.moveTo(200, 300));
-		this.setTexture(front1);
-		
+		this.setTouchable(Touchable.enabled);
 	}
 	
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		stateTime += Gdx.graphics.getDeltaTime();
-		//TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
-		//this.setTexture(currentFrame.getTexture());
-		//batch.draw(sprite,this.getX(),getY());
+		TextureRegion currentFrame = animation.getKeyFrame(stateTime, true);
+		this.setTexture(currentFrame.getTexture());
+
+		if(this.getActions() == null || this.getActions().size == 0) {
+			this.addAction(Actions.moveTo(MathUtils.random(0, maxwidth), MathUtils.random(0, 
+                    maxheight), 4f));
+		}
+		
 		super.draw(batch, parentAlpha);
 	}
 	
-	
+	@Override
+	public Actor hit(float x, float y, boolean touchable) {
+		Actor hit = super.hit(x, y, touchable);
+		
+		if(hit != null) {
+			this.remove();
+			return null;
+		}
+		
+		return hit;
+	}
+
+
+
 	enum Direct {
 		STOP,
 		UP,

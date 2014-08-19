@@ -7,7 +7,7 @@ public class Background extends GameObject {
 
 	public Background() {
 		setTexture("background.png");
-		setScale(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 	}
 	

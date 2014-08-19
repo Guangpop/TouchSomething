@@ -11,7 +11,6 @@ public class Game extends Stage {
 	// Fields
 	/////////////////////////////////////////////////////////////////
 	Background background;
-	Dango dango;
 	
 	/////////////////////////////////////////////////////////////////
 	// Methods
@@ -21,13 +20,14 @@ public class Game extends Stage {
 		Gdx.input.setInputProcessor(this); 
 		
 		background = new Background();
-		dango = new Dango();
-		
 		this.addActor(background);
-		this.addActor(dango);
+		
+		for (int i = 0 ; i < 50 ; ++i) {
+			this.addActor(new Dango());
+		}
+
 		
 		return true;
 	}
 	
-
 }

@@ -10,8 +10,9 @@ public abstract class GameObject extends Actor implements IGameObject {
 	/////////////////////////////////////////////////////////////////
 	// Fields
 	/////////////////////////////////////////////////////////////////
-	Texture image;
 	
+	Texture image;
+	Sprite sprite;
 	/////////////////////////////////////////////////////////////////
 	// Methods
 	/////////////////////////////////////////////////////////////////
@@ -20,35 +21,55 @@ public abstract class GameObject extends Actor implements IGameObject {
 	}
 	
 	public boolean initObject() {
-		setTexture("holder.png");
+		
+		image = new Texture("holder.png");
+		sprite = new Sprite(image);
 		return true;
 	}
 	
 	public boolean setTexture(String fileString) {
 		image = new Texture(fileString);
-		setBounds();
+		setSprite(image);
 		return true;
 	}
 	
 	public boolean setTexture(Texture texture) {
 		image = texture;
-		setBounds();
+		setSprite(image);
 		return true;
 	}
 
-	private void setBounds() {
-		setBounds(getX(), getY(), image.getWidth(), image.getHeight());
+	public void setColor(float r, float g, float b, float a) {
+		sprite.setColor(r, g, b, a);
 	}
 	
+//	public void setSize(int width, int height) {
+//		sprite.setSize(width, height);
+//		this.setWidth(width);
+//		this.setHeight(height);
+//	}
+	
+	/** Called when the actor's position has been changed. */
 	@Override
-	public void setSize(float width, float height) {
-		// TODO Auto-generated method stub
-		super.setSize(width, height);
+	protected void positionChanged () {
+		sprite.setPosition(this.getX(), this.getY());
+	}
+
+	/** Called when the actor's size has been changed. */
+	@Override
+	protected void sizeChanged () {
+		sprite.setSize(this.getWidth(), this.getHeight());
+	}
+	
+	private void setSprite(Texture texture) {
+		sprite.setTexture(image);
+		setSize(image.getWidth(), image.getHeight());
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		batch.draw(image, this.getX(), getY());
+		//batch.draw(sprite, this.getX(), getY());
+		sprite.draw(batch);
 	}
 
 }
